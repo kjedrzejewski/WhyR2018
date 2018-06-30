@@ -18,12 +18,7 @@ res_2pl_greta = calc_2pl_greta(dat_2pl)
 res_2pl_stan = calc_2pl_stan(dat_2pl)
 
 
-<<<<<<< HEAD
 save(dat_2pl, res_2pl_irt, res_2pl_tf, res_1pl_me, res_2pl_greta, res_2pl_stan, file = 'data/2pl.RData')
-=======
-
-save(dat_2pl, res_2pl_irt, res_2pl_tf, res_2pl_stan, file = 'data/2pl.RData')
->>>>>>> 7ff6df92cf758bf38392be24c46bb0b834bd9adf
 
 plot_ly(res_2pl_tf$losses) %>% add_lines(x = ~step, y = ~loss_total) %>% layout(xaxis = list(rangemode = "tozero"))
 plot_ly(res_2pl_tf$losses) %>% add_lines(x = ~step, y = ~loss) %>% layout(xaxis = list(rangemode = "tozero"))
@@ -303,6 +298,9 @@ save(results_greta, file = 'data/results_greta.RData')
 items = seq(50, 500, 50)
 persons = seq(500, 5000, 500)
 
+items = seq(550, 1000, 50)
+persons = seq(5500, 10000, 500)
+
 results_greta_gpu = tibble()
 
 for(i in 1:length(items)) {
@@ -310,6 +308,7 @@ for(i in 1:length(items)) {
   cat('####################################################################\n')
   cat('Started:', i, '\n')
   
+  tf$reset_default_graph()
   dat = generate_data_2pl(items[i], persons[i], 1)
   res = calc_2pl_greta(dat)
   
@@ -317,7 +316,7 @@ for(i in 1:length(items)) {
   cat('####################################################################\n')
   cat('####################################################################\n')
   
-  v = union_all(
+  results_greta_gpu = union_all(
     results_greta_gpu,
     tibble(
       lib = 'greta',
