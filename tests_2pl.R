@@ -7,6 +7,8 @@ source('2pl_tf.R')
 source('2pl_greta.R')
 source('2pl_stan.R')
 
+# tensorflow::use_python('/home/ubuntu/anaconda3/envs/tensorflow_p36/bin/python')
+
 dat_2pl = generate_data_2pl(100, 1000, 1)
 
 res_2pl_irt = calc_2pl_irt(dat_2pl)
@@ -14,6 +16,7 @@ res_1pl_me = calc_1pl_me(dat_2pl)
 res_2pl_tf = calc_2pl_tf(dat_2pl)
 res_2pl_greta = calc_2pl_greta(dat_2pl)
 res_2pl_stan = calc_2pl_stan(dat_2pl)
+
 
 
 save(dat_2pl, res_2pl_irt, res_2pl_tf, res_2pl_stan, file = 'data/2pl.RData')
@@ -229,6 +232,38 @@ save(results_tf, file = 'data/results_tf.RData')
 
 
 
+items = seq(50, 1000, 50)
+persons = seq(500, 10000, 500)
+
+results_tf_gpu = tibble()
+
+for(i in 1:length(items)) {
+  cat('####################################################################\n')
+  cat('####################################################################\n')
+  cat('Started:', i, '\n')
+  
+  dat = generate_data_2pl(items[i], persons[i], 1)
+  res = calc_2pl_tf(dat)
+  
+  cat('Time:', res$time, '\n')
+  cat('####################################################################\n')
+  cat('####################################################################\n')
+  
+  results_tf_gpu = union_all(
+    results_tf_gpu,
+    tibble(
+      lib = 'tf',
+      items = items[i],
+      persons = persons[i],
+      time = res$time
+    )
+  )
+}
+
+save(results_tf_gpu, file = 'data/results_tf_gpu.RData')
+
+
+
 items = seq(50, 500, 50)
 persons = seq(500, 5000, 500)
 
@@ -258,3 +293,35 @@ for(i in 1:length(items)) {
 }
 
 save(results_greta, file = 'data/results_greta.RData')
+
+
+
+items = seq(50, 500, 50)
+persons = seq(500, 5000, 500)
+
+results_greta_gpu = tibble()
+
+for(i in 1:length(items)) {
+  cat('####################################################################\n')
+  cat('####################################################################\n')
+  cat('Started:', i, '\n')
+  
+  dat = generate_data_2pl(items[i], persons[i], 1)
+  res = calc_2pl_greta(dat)
+  
+  cat('Time:', res$time, '\n')
+  cat('####################################################################\n')
+  cat('####################################################################\n')
+  
+  v = union_all(
+    results_greta_gpu,
+    tibble(
+      lib = 'greta',
+      items = items[i],
+      persons = persons[i],
+      time = res$time
+    )
+  )
+}
+
+save(results_greta_gpu, file = 'data/results_greta_gpu.RData')
