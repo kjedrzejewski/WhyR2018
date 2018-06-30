@@ -1,7 +1,6 @@
 library(plotly)
 
 source('2pl_generate_data.R')
-source('2pl_functions.R')
 source('2pl_irt.R')
 source('1pl_me.R')
 source('2pl_tf.R')
