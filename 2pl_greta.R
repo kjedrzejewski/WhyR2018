@@ -50,7 +50,7 @@ xxx_calc_2pl_greta_get_stats = function(d){
 
 
 
-calc_2pl_greta <- function(dat, iter = 4000, warmup = floor(iter/4)){
+calc_2pl_greta <- function(dat, iter = 16000, warmup = floor(iter/4)){
   t1 = Sys.time()
   
   greta_data = xxx_calc_2pl_greta_prep_data(dat)
