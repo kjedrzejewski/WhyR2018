@@ -16,7 +16,7 @@ res_2pl_greta = calc_2pl_greta(dat_2pl)
 res_2pl_stan = calc_2pl_stan(dat_2pl)
 
 
-save(dat_2pl, res_2pl_irt, res_2pl_tf, res_2pl_stan, file = 'data/2pl.RData')
+save(dat_2pl, res_2pl_irt, res_2pl_tf, res_1pl_me, res_2pl_greta, res_2pl_stan, file = 'data/2pl.RData')
 
 plot_ly(res_2pl_tf$losses) %>% add_lines(x = ~step, y = ~loss_total) %>% layout(xaxis = list(rangemode = "tozero"))
 plot_ly(res_2pl_tf$losses) %>% add_lines(x = ~step, y = ~loss) %>% layout(xaxis = list(rangemode = "tozero"))
@@ -129,8 +129,8 @@ plot_ly() %>%
 
 
 
-items = seq(100, 1000, 100)
-persons = seq(1000, 10000, 1000)
+items = seq(50, 1000, 50)
+persons = seq(500, 10000, 500)
 
 
 results_irt = tibble()
