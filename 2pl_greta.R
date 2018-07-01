@@ -2,8 +2,6 @@ library(greta)
 library(dplyr)
 library(tidyr)
 
-tensorflow::use_python('/usr/local/anaconda3/bin/python')
-
 xxx_calc_2pl_greta_prep_data <- function(dat){
   dat$test_data %>%
     mutate(

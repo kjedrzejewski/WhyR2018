@@ -6,8 +6,6 @@ library(dplyr)
 library(tidyr)
 library(purrr)
 
-use_python('/usr/local/anaconda3/bin/python')
-
 # conversion from matrix representation to facts
 xxx_calc_2pl_tf_prep_data <- function(dat){
   dat$test_data %>%
