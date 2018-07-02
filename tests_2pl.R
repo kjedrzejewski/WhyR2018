@@ -336,8 +336,8 @@ save(results_greta_gpu, file = 'data/results_greta_gpu.RData')
 
 
 
-items = seq(10, 100, 10)
-persons = seq(100, 1000, 100)
+items = seq(110, 200, 10)
+persons = seq(1100, 2000, 100)
 
 results_stan = tibble()
 
@@ -356,7 +356,7 @@ for(i in 1:length(items)) {
   results_stan = union_all(
     results_stan,
     tibble(
-      lib = 'greta',
+      lib = 'stan',
       items = items[i],
       persons = persons[i],
       time = res$time
