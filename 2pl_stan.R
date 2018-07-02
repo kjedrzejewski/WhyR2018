@@ -44,37 +44,40 @@ calc_2pl_stan <- function(dat, iter = 4000, warmup = floor(iter/4)){
     iter = iter
   )
   
-  diffs_calc = apply(extract(stan_2pl_fit)$diffs, -1, mean)
-  diffs_calc_ci = t(apply(extract(stan_2pl_fit)$diffs, -1, quantile, c(0.025,0.975)))
-  discs_calc = apply(extract(stan_2pl_fit)$discs, -1, mean)
-  discs_calc_ci = t(apply(extract(stan_2pl_fit)$discs, -1, quantile, c(0.025,0.975)))
-  skills_calc = apply(extract(stan_2pl_fit)$skills, -1, mean)
-  skills_calc_ci = t(apply(extract(stan_2pl_fit)$skills, -1, quantile, c(0.025,0.975)))
+  diffs_calc = apply(rstan::extract(stan_2pl_fit)$diffs, -1, mean)
+  diffs_calc_ci = t(apply(rstan::extract(stan_2pl_fit)$diffs, -1, quantile, c(0.025,0.975)))
+  discs_calc = apply(rstan::extract(stan_2pl_fit)$discs, -1, mean)
+  discs_calc_ci = t(apply(rstan::extract(stan_2pl_fit)$discs, -1, quantile, c(0.025,0.975)))
+  skills_calc = apply(rstan::extract(stan_2pl_fit)$skills, -1, mean)
+  skills_calc_ci = t(apply(rstan::extract(stan_2pl_fit)$skills, -1, quantile, c(0.025,0.975)))
   
   
-  diffs_discs = tibble(
-    diffs_discs_id = names(dat$diffs),
-    diffs_orig = dat$diffs,
-    diffs_calc = diffs_calc,
-    diffs_calc_ci_l = diffs_calc_ci[,1],
-    diffs_calc_ci_u = diffs_calc_ci[,2],
-    discs_orig = dat$discs,
-    discs_calc = discs_calc,
-    discs_calc_ci_l = discs_calc_ci[,1],
-    discs_calc_ci_u = discs_calc_ci[,2]
-  )
   
-  skills = tibble(
-    skills_id = names(dat$skills),
-    skills_orig = dat$skills,
-    skills_calc = skills_calc,
-    skills_calc_ci_l = skills_calc_ci[,1],
-    skills_calc_ci_u = skills_calc_ci[,2]
-  )
+  item_params = dat$items %>%
+    rename(
+      diffs_orig = diff,
+      discs_orig = disc
+    ) %>%
+    mutate(
+      diffs_calc = diffs_calc,
+      diffs_calc_ci_l = diffs_calc_ci[,1],
+      diffs_calc_ci_u = diffs_calc_ci[,2],
+      discs_calc = discs_calc,
+      discs_calc_ci_l = discs_calc_ci[,1],
+      discs_calc_ci_u = discs_calc_ci[,2]
+    )
+  
+  person_params = dat$persons %>%
+    rename(skills_orig = skill) %>%
+    mutate(
+      skills_calc = skills_calc,
+      skills_calc_ci_l = skills_calc_ci[,1],
+      skills_calc_ci_u = skills_calc_ci[,2]
+    )
   
   res = list(
-    diffs_discs = diffs_discs,
-    skills = skills
+    items = item_params,
+    persons = person_params
   )
   
   t2 = Sys.time()

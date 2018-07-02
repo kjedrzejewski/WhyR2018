@@ -12,11 +12,16 @@ source('2pl_stan.R')
 
 dat_2pl = generate_data_2pl(100, 1000, 1)
 
+# estimation using the specialised package TAM
 res_2pl_irt = calc_2pl_irt(dat_2pl)
+# estimation using logistic regression with random effects. It's 1PL model run on 2PL data, but we do it only to obtain processing time
 res_1pl_me = calc_1pl_me(dat_2pl)
-res_2pl_tf = calc_2pl_tf(dat_2pl)
-res_2pl_greta = calc_2pl_greta(dat_2pl)
-res_2pl_stan = calc_2pl_stan(dat_2pl)
+# estimation using MLE with logloss and gradient descent (tensorflow)
+res_2pl_tf = calc_2pl_tf(dat_2pl)  # By default it does up to 50 000 iterations and ends earlier if loss stops changing (minimum 10 000 iterations)
+# estimation using greta (probabilitic programming)
+res_2pl_greta = calc_2pl_greta(dat_2pl) # By default 16000 samples with 4000 samples of warmup
+# estimation using stan (probabilitic programming)
+res_2pl_stan = calc_2pl_stan(dat_2pl) # By default 4 chains of 4000 samples with 1000 samples of warmup
 
 
 save(dat_2pl, res_2pl_irt, res_2pl_tf, res_1pl_me, res_2pl_greta, res_2pl_stan, file = 'data/2pl.RData')
@@ -327,3 +332,37 @@ for(i in 1:length(items)) {
 }
 
 save(results_greta_gpu, file = 'data/results_greta_gpu.RData')
+
+
+
+
+items = seq(10, 100, 10)
+persons = seq(100, 1000, 100)
+
+results_stan = tibble()
+
+for(i in 1:length(items)) {
+  cat('####################################################################\n')
+  cat('####################################################################\n')
+  cat('Started:', i, '\n')
+  
+  dat = generate_data_2pl(items[i], persons[i], 1)
+  res = calc_2pl_stan(dat)
+  
+  cat('Time:', res$time, '\n')
+  cat('####################################################################\n')
+  cat('####################################################################\n')
+  
+  results_stan = union_all(
+    results_stan,
+    tibble(
+      lib = 'greta',
+      items = items[i],
+      persons = persons[i],
+      time = res$time
+    )
+  )
+}
+
+save(results_stan, file = 'data/results_stan.RData')
+
