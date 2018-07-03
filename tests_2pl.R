@@ -302,8 +302,8 @@ save(results_greta, file = 'data/results_greta.RData')
 
 
 
-items = seq(50, 500, 50)
-persons = seq(500, 5000, 500)
+items = seq(50, 1000, 50)
+persons = seq(500, 10000, 500)
 
 results_greta_gpu = tibble()
 
@@ -336,8 +336,8 @@ save(results_greta_gpu, file = 'data/results_greta_gpu.RData')
 
 
 
-items = seq(110, 200, 10)
-persons = seq(1100, 2000, 100)
+items = seq(10, 200, 10)
+persons = seq(100, 2000, 100)
 
 results_stan = tibble()
 
