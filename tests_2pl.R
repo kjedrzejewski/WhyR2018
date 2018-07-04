@@ -173,8 +173,8 @@ save(results_irt, file = 'data/results_irt.RData')
 
 
 
-items = seq(600, 1000, 50)
-persons = seq(6000, 10000, 500)
+items = seq(50, 1000, 50)
+persons = seq(500, 10000, 500)
 
 results_me = tibble()
 
